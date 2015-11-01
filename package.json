@@ -1,7 +1,7 @@
 {
   "name": "postcss-raw",
-  "version": "0.1.0",
-  "description": "Output exactly what is inside the @raw at-rule (untouched)",
+  "version": "0.1.1",
+  "description": "Output nodes inside the @raw at-rule untouched",
   "author": {
     "name": "Eric Eastwood",
     "email": "contact@ericeastwood.com",
@@ -10,7 +10,8 @@
   "keywords": [
     "postcss",
     "css",
-    "postcss-plugin"
+    "postcss-plugin",
+    "raw"
   ],
   "license": "MIT",
   "repository": {

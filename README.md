@@ -2,7 +2,7 @@
 
 # PostCSS Raw
 
-[PostCSS](https://github.com/postcss/postcss) plugin to output exactly what is inside the `@raw` at-rule. Untouched by other plugins in the stack.
+[PostCSS](https://github.com/postcss/postcss) plugin that output nodes inside the `@raw` at-rule, untouched by other plugins in the plugin stack.
 
 ## Latest Version: v0.1.0
 
