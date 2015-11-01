@@ -1,41 +1,28 @@
-[![npm version](https://badge.fury.io/js/postcss-reverse-media.svg)](http://badge.fury.io/js/postcss-reverse-media) [![Build Status](https://travis-ci.org/MadLittleMods/postcss-reverse-media.svg)](https://travis-ci.org/MadLittleMods/postcss-reverse-media)
+[![npm version](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/postcss-raw) [![Build Status](https://travis-ci.org/MadLittleMods/postcss-raw.svg)](https://travis-ci.org/MadLittleMods/postcss-raw)
 
-# PostCSS Reverse Media
+# PostCSS Raw
 
-[PostCSS](https://github.com/postcss/postcss) plugin to reverse media query parameters. Equivalent to a `not` if the native syntax allowed. Useful to avoid media query overlap.
+[PostCSS](https://github.com/postcss/postcss) plugin to output exactly what is inside the `@raw` at-rule. Untouched by other plugins in the stack.
 
-## Wait, I thought media queries had `not` and logic already?
+## Latest Version: v0.1.0
 
-Unfortunately the `not all` trick doesn't work when you want to chain(`and`) another parameter.
-
- - This works to reverse/invert/not the media query parameter:
- 	 - `@media not all and (max-width: 250px)`
- - When you want to chain, this doesn't work:
- 	 - `@media (max-width: 500px) and not all and (max-width: 250px)`
-
-I created this plugin so that this kind of thing is easy to do. I prefer to to use the `reverse` keyword(to avoid confusion and collision in the future) but feel free to [change it to `not` in the options](#options).
-
- - With `postcss-reverse-media`:
- 	 -`@media (max-width: 500px) and reverse (max-width: 250px)`
-
-More info about media query logic in this article, [*Logic in Media Queries* on CSS-Tricks](https://css-tricks.com/logic-in-media-queries/)
-
-
-## Latest Version: v0.1.2
-
-### [Changelog](https://github.com/MadLittleMods/postcss-reverse-media/blob/master/CHANGELOG.md)
+### [Changelog](https://github.com/MadLittleMods/postcss-raw/blob/master/CHANGELOG.md)
 
 ### Install
 
-`npm install postcss-reverse-media --save-dev`
+`npm install postcss-raw --save-dev`
 
 # Usage
+
+`postcss-raw` is a two-part process. First we inspect(`require('postcss-raw').inspect()`) and record any child nodes in the `@raw` at-rule and remove them from the AST tree. This way other plugins can't touch what was inside. Then when you run the write(`require('postcss-raw').write()`), we put those child nodes back in place without the wrapping `@raw` at-rule.
 
 ## Basic Example
 
 ```js
 var postcss = require('postcss');
-var reverseMedia = require('postcss-reverse-media');
+var raw = require('postcss-raw');
+// ES6 modules:
+//import { inspect as rawInspect, write as rawWrite } from 'postcss-raw';
 
 var fs = require('fs');
 
@@ -43,64 +30,28 @@ var mycss = fs.readFileSync('input.css', 'utf8');
 
 // Process your CSS with postcss-reverse-media
 var output = postcss([
-        reverseMedia(/*options*/)
-    ])
-    .process(mycss)
-    .css;
+		raw.inspect(/*options*/),
+		// other plugins...
+		raw.write(/*options*/)
+	])
+	.process(mycss)
+	.css;
 
 console.log(output);
 ```
 
 Input:
 ```css
-@media reverse (max-width: 150px) { /*...*/ }
-
-@media reverse (min-width: 150px) { /*...*/ }
+@raw {
+	@import "variables";
+	$foo: #f00;
+}
 ```
 
 Output:
 ```css
-@media (min-width: 150.001px) { /*...*/ }
-
-@media (max-width: 149.999px) { /*...*/ }
-```
-
-## Chaining parameters with logic
-
-Input:
-```css
-@media (max-width: 300px) and reverse (max-width: 150px) { /*...*/ }
-
-@media (min-width: 50px) and reverse (min-width: 150px) { /*...*/ }
-```
-
-Output:
-```css
-@media (max-width: 300px) and (min-width: 150.001px) { /*...*/ }
-
-@media (min-width: 50px) and (max-width: 149.999px) { /*...*/ }
-```
-
-## Use with other plugins that modify `@media`
-
-Put `postcss-reverse-media` after other plugins that modify `@media` rules. This is to have all of the substitutions and transformations complete before we look for the `reverse` qualifier keyword and do our transformations.
-
-```js
-var customMedia = require('postcss-custom-media');
-var minmax = require('postcss-media-minmax');
-var reverseMedia = require('postcss-reverse-media');
-
-var pluginStack = [
-	customMedia(),
-	minmax(),
-	reverseMedia()
-];
-```
-
-```css
-@custom-media --small-viewport (max-width: 150px);
-
-@media reverse (--small-viewport) { /*...*/ }
+@import "variables";
+$foo: #f00;
 ```
 
 
@@ -108,10 +59,8 @@ var pluginStack = [
 
 # Options
 
- - `keyword`: string - The media query param reversal operator keyword.
- 	 - Default: `'reverse'`
- - `increment`: number - The ammount we increment/decrement by to avoid parameter overlap
- 	 - Default: `0.001`
+ - `atRuleKeyword`: string - The media query name keyword that applies the plugin.
+	  - Default: `'raw'`
 
 
 
