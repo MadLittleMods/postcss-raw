@@ -1,4 +1,4 @@
-[![npm version](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/postcss-raw) [![Build Status](https://travis-ci.org/MadLittleMods/postcss-raw.svg)](https://travis-ci.org/MadLittleMods/postcss-raw)
+[![npm version](https://img.shields.io/npm/v/postcss-raw.svg)](https://www.npmjs.com/package/postcss-raw) [![Build Status](https://travis-ci.org/MadLittleMods/postcss-raw.svg)](https://travis-ci.org/MadLittleMods/postcss-raw)
 
 # PostCSS Raw
 
