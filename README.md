@@ -4,8 +4,6 @@
 
 [PostCSS](https://github.com/postcss/postcss) plugin to output nodes inside the `@raw` at-rule, untouched by other plugins in the plugin stack.
 
-## Latest Version: v0.1.0
-
 ### [Changelog](https://github.com/MadLittleMods/postcss-raw/blob/master/CHANGELOG.md)
 
 ### Install
