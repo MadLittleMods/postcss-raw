@@ -32,7 +32,7 @@ export const write = postcss.plugin('postcss-raw-write', (options) => {
 			// Put the contents back in the same place but outside of the at-rule
 			const originalChildrenNodes = atRuleToChildNodesMap.get(atRule);
 			if(originalChildrenNodes) {
-				originalChildrenNodes.forEach((originalNode) => {
+				originalChildrenNodes.reverse().forEach((originalNode) => {
 					atRule.parent.insertAfter(atRule, originalNode);
 				});
 			}
